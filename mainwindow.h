@@ -21,6 +21,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void RunPlotCarga();
+    int lerBateria();
 private slots:
     void MakePlotCarga();
     void MakePlotDescarga();
@@ -29,7 +30,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    std::thread minhaThread;
+    std::thread minhaThread, minhaThread2;
     //std::thread minhaThread2;
     bool primeiraVez;
     bool parado;

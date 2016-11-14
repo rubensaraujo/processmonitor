@@ -25,7 +25,6 @@ MainWindow::~MainWindow()
 void MainWindow::parar()
 {
     parado = true;
-
 }
 
 void MainWindow::iniciar()
@@ -33,45 +32,46 @@ void MainWindow::iniciar()
 
     if(primeiraVez)
     {
-        minhaThread = std::thread(&MainWindow::RunPlotCarga, this);
-        //minhaThread2 = std::thread(&MainWindow::MakePlotDescarga, this);
+        //minhaThread = std::thread(&MainWindow::lerBateria, this);
+        minhaThread2 = std::thread(&MainWindow::RunPlotCarga, this);
         primeiraVez = false;
     }
     parado = false;
+}
 
+int MainWindow::lerBateria(){
+    FILE* file = fopen("/sys/class/power_supply/BAT1/capacity", "r");
+    unsigned int porcentagem;
+
+    fscanf(file, "%d", &porcentagem);
+
+    fclose(file);
+
+    return porcentagem;
 }
 
 
 void MainWindow::MakePlotCarga(){
-    ui->plotCarga->addGraph(); // blue line
+    ui->plotCarga->addGraph()->setPen(QPen(QColor(40, 110, 255)));; // blue line
     ui->plotCarga->graph(0);
 
     QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
     timeTicker->setTimeFormat("%h:%m:%s");
     ui->plotCarga->xAxis->setTicker(timeTicker);
     ui->plotCarga->axisRect()->setupFullAxesBox();
-    ui->plotCarga->yAxis->setRange(0, 100);
+    ui->plotCarga->yAxis->setRange(0, 110);
 
+    ui->plotCarga->xAxis->setLabel("Tempo de Execução");
+    ui->plotCarga->yAxis->setLabel("% Bateria");
 
 }
 void MainWindow::RunPlotCarga(){
-    std::string dado;
-    std::ifstream readDado;
-    //dado = "teste";
+    static unsigned int porcentagemBat;
+
     while(true){
         if(!parado){
-            //std::system("cat /sys/class/power_supply/BAT1/uevent | grep POWER_SUPPLY_CAPACITY= ");
-            readDado.open("/sys/class/power_supply/BAT1/uevent/capacity");
-            while (!readDado.eof()) {
 
-
-                getline(readDado, dado);
-                std::cout << dado << '\n';
-
-
-             }
-            readDado.close();
-            //std::cout << dado << '\n';
+            porcentagemBat = lerBateria();
 
             static QTime time(QTime::currentTime());
             double tempo = time.elapsed()/1000.0;
@@ -80,15 +80,15 @@ void MainWindow::RunPlotCarga(){
 
             if (tempo-lastPointKey > 0.001)
             {
-
-              ui->plotCarga->graph(0)->addData(tempo, 50);
-
+              ui->plotCarga->graph(0)->addData(tempo, porcentagemBat);
               lastPointKey = tempo;
             }
 
             ui->plotCarga->xAxis->setRange(tempo, 8, Qt::AlignRight);
             ui->plotCarga->replot();
-            std::this_thread::sleep_for(std::chrono::seconds(1));
+
+            std::this_thread::sleep_for(std::chrono::seconds(2));
+            //fclose(file);
         }
     }
 }
