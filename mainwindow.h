@@ -22,6 +22,8 @@ public:
     ~MainWindow();
     void RunPlotCarga();
     int lerBateria();
+    void RunPlotDescarga();
+    double lerBateria2();
 private slots:
     void MakePlotCarga();
     void MakePlotDescarga();
