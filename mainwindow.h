@@ -2,6 +2,12 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <thread>
+#include <chrono>
+#include <string>
+#include <cstdlib>
+#include <fstream>
+#include <iostream>
 
 namespace Ui {
 class MainWindow;
@@ -14,9 +20,19 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void RunPlotCarga();
+private slots:
+    void MakePlotCarga();
+    void MakePlotDescarga();
+    void parar();
+    void iniciar();
 
 private:
     Ui::MainWindow *ui;
+    std::thread minhaThread;
+    //std::thread minhaThread2;
+    bool primeiraVez;
+    bool parado;
 };
 
 #endif // MAINWINDOW_H
