@@ -63,19 +63,15 @@ double MainWindow::lerBateria2(){
     fscanf(file3, "%lf", &powerNow);
     fclose(file);
 
-    printf("%lf , %lf , %lf \n", energyFull, energyNow, powerNow);
-
-
     teste = (energyFull - energyNow) / powerNow ;
-    //printf("%.3f\n", teste);
+
     tempoDesc = teste * 60.0;
-    printf("%.3f\n", tempoDesc);
 
     return tempoDesc;
 }
 
 void MainWindow::MakePlotCarga(){
-    ui->plotCarga->addGraph()->setPen(QPen(QColor(40, 110, 255))); // blue line
+    ui->plotCarga->addGraph()->setPen(QPen(QColor(40, 110, 255)));
     ui->plotCarga->graph(0);
 
     QSharedPointer<QCPAxisTickerTime> timeTicker(new QCPAxisTickerTime);
