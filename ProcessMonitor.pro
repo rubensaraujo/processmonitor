@@ -20,3 +20,9 @@ HEADERS  += mainwindow.h \
     qcustomplot.h
 
 FORMS    += mainwindow.ui
+
+DISTFILES += \
+    cpuData \
+    memData \
+    saidaCPU.txt \
+    saidaMem.txt

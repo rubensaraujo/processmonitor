@@ -1,0 +1,1 @@
+Os executaveis cpuData e memData devem ser executados em terminais diferentes e no momento em que for rodar o app no QtCreator
